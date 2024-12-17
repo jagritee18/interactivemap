@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Interactive Guidelines Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <style>
+        #map { height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        var regions = {
+            "North America": { coords: [54.5260, -105.2551], guidelines: [
+                { name: "Akwesasne Task Force (1996)", url: "https://drive.google.com/file/d/1uecScBuGZTwoGLQlH41-8PAH-ZYCTRHk/view?usp=sharing" },
+                { name: "Alaska Native Guidelines (2000)", url: "https://drive.google.com/file/d/19BzDKhkR4tGxeCJSnUFsbpd5NjiTkMjS/view?usp=sharing" }
+            ]},
+            "Latin America": { coords: [-10.0, -55.0], guidelines: [
+                { name: "ANDES Community Protocols (2011)", url: "https://drive.google.com/file/d/1jOdoePWpfP7wqO2_sq4ZGjKXlEBg7UjM/view?usp=sharing" }
+            ]},
+            "Asia and Pacific": { coords: [-25.0, 140.0], guidelines: [
+                { name: "AIATSIS Code of Ethics (2020)", url: "https://www.wipo.int/export/sites/www/tk/en/databases/creative_heritage/docs/aiatsis.pdf" }
+            ]},
+            "Africa": { coords: [0.0, 20.0], guidelines: [
+                { name: "San Code of Research Ethics (2017)", url: "https://www.globalcodeofconduct.org/wp-content/uploads/2018/04/San-Code-of-RESEARCH-Ethics-Booklet_English.pdf" }
+            ]},
+            "Europe": { coords: [50.0, 10.0], guidelines: [
+                { name: "The Saami Council Guidelines (2023)", url: "https://www.saamicouncil.net/documentarchive/guidelines-for-the-saami-councils-participation-in-research-projects" }
+            ]},
+            "Global/International": { coords: [0.0, 0.0], guidelines: [
+                { name: "CARE Principles (2019)", url: "https://arramatproject.org/wp-content/uploads/2022/10/IDS-Data-Sov_Managemetn-Plan-Oct20.pdf" }
+            ]}
+        };
+
+        for (var region in regions) {
+            var regionData = regions[region];
+            var popupContent = `<strong>${region} Guidelines:</strong><ul>` + regionData.guidelines.map(function(g) {
+                return `<li><a href="${g.url}" target="_blank">${g.name}</a></li>`;
+            }).join('') + `</ul>`;
+
+            L.marker(regionData.coords).addTo(map).bindPopup(popupContent);
+        }
+    </script>
+</body>
+</html>
